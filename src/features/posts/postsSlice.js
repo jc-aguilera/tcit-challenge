@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { listPosts } from '../../api';
+import { insertPost, removePost, listPosts } from '../../api';
 
 export const postsSlice = createSlice({
   name: 'posts',
@@ -13,38 +13,31 @@ export const postsSlice = createSlice({
     addPost: (state, actions) => {
       state.postList = [...state.postList, actions.payload];
     },
-    removePost: (state, actions) => {
+    deletePost: (state, actions) => {
       state.postList = state.postList.filter((post) => post.id !== actions.payload)
     },
   },
 })
 
-export const { setPosts, addPost, removePost } = postsSlice.actions;
+// eslint-disable-next-line no-unused-vars
+const { setPosts, addPost, deletePost } = postsSlice.actions;
 
 export const getPosts = () => (dispatch) => {
-  new Promise(resolve => setTimeout(() => resolve({ data: [
-    { id: 1, name: 'Post 1', description: 'Lorem ipsum dolor sit amet 1' },
-    { id: 2, name: 'Post 2', description: 'Lorem ipsum dolor sit amet 2' },
-    { id: 3, name: 'Post 3', description: 'Lorem ipsum dolor sit amet 3' },
-  ]}), 1000)).then((response) => {
+  listPosts().then((response) => {
     dispatch(setPosts(response.data));
   });
 };
 
-export const deletePost = (postId) => (dispatch) => {
-  dispatch(removePost(postId));
+export const destroyPost = (postId) => (dispatch) => {
+  removePost(postId).then(() => {
+    dispatch(deletePost(postId));
+  })
 }
-
 export const createPost = (postData) => (dispatch) => {
-    new Promise(resolve => setTimeout(() => resolve({
-      data: {
-        id: 4,
-        name: postData.name,
-        description: postData.description,
-      },
-    }), 1000)).then((response) => {
-      dispatch(addPost(response.data));
-    });
-  };
+  const { name, description } = postData;
+  insertPost({ name, description}).then((response) => {
+    dispatch(setPosts(response.data));
+  });
+};
 
 export default postsSlice.reducer;

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { Button, Col, Container, Input, Row, Table } from 'reactstrap'
-import { getPosts, deletePost, createPost } from '../features/posts/postsSlice';
+import { getPosts, createPost, destroyPost } from '../features/posts/postsSlice';
 
 export default function Posts() {
 
@@ -52,7 +52,7 @@ export default function Posts() {
                     <Button
                       block
                       color="danger"
-                      onClick={() => dispatch(deletePost(post.id))}>Eliminar</Button>
+                      onClick={() => dispatch(destroyPost(post.id))}>Eliminar</Button>
                   </td>
                 </tr>
               ))
