@@ -55,18 +55,18 @@ export default function Posts() {
           <Table striped>
             <thead>
               <tr>
-                <th style={{ width: '25%'}}>Nombre</th>
-                <th style={{ width: '58.33%'}}>Descripción</th>
-                <th style={{ width: '16.67%'}}>Acción</th>
+                <th style={{ width: '25%' }}>Nombre</th>
+                <th style={{ width: '58.33%' }}>Descripción</th>
+                <th style={{ width: '16.67%' }}>Acción</th>
               </tr>
             </thead>
             <tbody>
               {
                 postList.map((post) => (
                   <tr key={post.id}>
-                    <td style={{ width: '25%'}}>{post.name}</td>
-                    <td style={{ width: '58.33%'}}>{post.description}</td>
-                    <td style={{ width: '16.67%'}}>
+                    <td style={{ width: '25%' }}>{post.name}</td>
+                    <td style={{ width: '58.33%' }}>{post.description}</td>
+                    <td style={{ width: '16.67%' }}>
                       <Button
                         block
                         color="danger"
@@ -78,7 +78,7 @@ export default function Posts() {
             </tbody>
           </Table>
         </Col>
-        </Row>
+      </Row>
       <Row className="mt-2">
         <Col xs="12" sm="3">
           <Input
@@ -105,7 +105,7 @@ export default function Posts() {
             color="success"
             disabled={!name || !description}
             onClick={createNewPost}
-            >Crear</Button>
+          >Crear</Button>
         </Col>
       </Row>
     </Container>
