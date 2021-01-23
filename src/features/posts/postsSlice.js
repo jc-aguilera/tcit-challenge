@@ -21,7 +21,6 @@ export const postsSlice = createSlice({
   },
 });
 
-// eslint-disable-next-line no-unused-vars
 const { setPosts, addPost, deletePost } = postsSlice.actions;
 
 export const getPosts = () => (dispatch) =>
@@ -37,7 +36,7 @@ export const destroyPost = (postId) => (dispatch) =>
 export const createPost = (postData) => (dispatch) => {
   const { name, description } = postData;
   return insertPost({ name, description }).then((response) => {
-    dispatch(setPosts(response.data));
+    dispatch(addPost(response.data));
   });
 };
 

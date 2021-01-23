@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { Button, Col, Container, Input, Row, Table } from 'reactstrap';
+import { Button, Col, Container, Form, Input, Row, Table } from 'reactstrap';
 import {
   getPosts,
   createPost,
@@ -17,22 +17,21 @@ export default function Posts() {
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
 
-  const createNewPost = () => {
+  const onNewPostSubmit = (e) => {
+    e.preventDefault();
     if (posts.map((post) => post.name).includes(name)) return;
     dispatch(createPost({ name, description })).then(() => {
       setName('');
       setDescription('');
     });
   };
+
   const deletePostWithId = (postId) => {
     dispatch(destroyPost(postId)).then(() => {
       setSearch('');
     });
   };
 
-  const postFilter = (post) =>
-    !search ||
-    post.name.toLocaleLowerCase().includes(search.toLocaleLowerCase());
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => dispatch(getPosts()), []);
 
@@ -40,28 +39,37 @@ export default function Posts() {
     setPostList(posts);
   }, [posts]);
 
+  const onSearchSubmit = (e) => {
+    e.preventDefault();
+    setPostList(
+      posts.filter(
+        (post) =>
+          !search ||
+          post.name.toLocaleLowerCase().includes(search.toLocaleLowerCase())
+      )
+    );
+  };
+
   return (
     <Container>
-      <Row className="mt-2">
-        <Col xs="7" sm="5">
-          <Input
-            type="search"
-            placeholder="Filtro de nombre"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-          />
-        </Col>
-        <Col sm="4" className="d-none d-sm-block" />
-        <Col xs="5" sm="3">
-          <Button
-            block
-            color="primary"
-            onClick={() => setPostList(posts.filter(postFilter))}
-          >
-            Buscar
-          </Button>
-        </Col>
-      </Row>
+      <Form onSubmit={onSearchSubmit}>
+        <Row className="mt-2">
+          <Col xs="7" sm="5">
+            <Input
+              type="search"
+              placeholder="Filtro de nombre"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+            />
+          </Col>
+          <Col sm="4" className="d-none d-sm-block" />
+          <Col xs="5" sm="3">
+            <Button type="submit" block color="primary">
+              Buscar
+            </Button>
+          </Col>
+        </Row>
+      </Form>
       <Row className="mt-2">
         <Col xs="12">
           <Table striped>
@@ -92,36 +100,38 @@ export default function Posts() {
           </Table>
         </Col>
       </Row>
-      <Row className="mt-2">
-        <Col xs="12" sm="3">
-          <Input
-            className="mb-1"
-            type="text"
-            placeholder="Nombre"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-          />
-        </Col>
-        <Col xs="12" sm="6">
-          <Input
-            className="mb-1"
-            type="text"
-            placeholder="Descripción"
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-          />
-        </Col>
-        <Col xs="12" sm="3">
-          <Button
-            block
-            color="success"
-            disabled={!name || !description}
-            onClick={createNewPost}
-          >
-            Crear
-          </Button>
-        </Col>
-      </Row>
+      <Form onSubmit={onNewPostSubmit}>
+        <Row className="mt-2">
+          <Col xs="12" sm="3">
+            <Input
+              className="mb-1"
+              type="text"
+              placeholder="Nombre"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+            />
+          </Col>
+          <Col xs="12" sm="6">
+            <Input
+              className="mb-1"
+              type="text"
+              placeholder="Descripción"
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+            />
+          </Col>
+          <Col xs="12" sm="3">
+            <Button
+              type="submit"
+              block
+              color="success"
+              disabled={!name || !description}
+            >
+              Crear
+            </Button>
+          </Col>
+        </Row>
+      </Form>
     </Container>
   );
 }
