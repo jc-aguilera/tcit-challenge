@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice } from '@reduxjs/toolkit';
 import { insertPost, removePost, listPosts } from '../../api';
 
 export const postsSlice = createSlice({
@@ -14,28 +14,29 @@ export const postsSlice = createSlice({
       state.postList = [...state.postList, actions.payload];
     },
     deletePost: (state, actions) => {
-      state.postList = state.postList.filter((post) => post.id !== actions.payload)
+      state.postList = state.postList.filter(
+        (post) => post.id !== actions.payload
+      );
     },
   },
-})
+});
 
 // eslint-disable-next-line no-unused-vars
 const { setPosts, addPost, deletePost } = postsSlice.actions;
 
-export const getPosts = () => (dispatch) => {
+export const getPosts = () => (dispatch) =>
   listPosts().then((response) => {
     dispatch(setPosts(response.data));
   });
-};
 
-export const destroyPost = (postId) => (dispatch) => {
+export const destroyPost = (postId) => (dispatch) =>
   removePost(postId).then(() => {
     dispatch(deletePost(postId));
-  })
-}
+  });
+
 export const createPost = (postData) => (dispatch) => {
   const { name, description } = postData;
-  insertPost({ name, description}).then((response) => {
+  return insertPost({ name, description }).then((response) => {
     dispatch(setPosts(response.data));
   });
 };
