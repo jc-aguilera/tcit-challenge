@@ -1,5 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { insertPost, removePost, listPosts } from '../../api';
+import { postsApi } from '../../api';
+
+const { listPosts, insertPost, removePost } = postsApi;
 
 export const postsSlice = createSlice({
   name: 'posts',
